@@ -1,0 +1,17 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Node modules
+node_modules/
+
+# Build outputs (React, etc.)
+build/
+dist/
+
+# Env files
+.env
+
+# Mac / system
+.DS_Store

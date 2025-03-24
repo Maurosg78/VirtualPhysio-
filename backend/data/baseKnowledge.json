@@ -1,0 +1,119 @@
+{
+  "hombro": {
+    "pathologies": [
+      {
+        "id": "tendinopatia_manguito",
+        "name": "Tendinopatía del Manguito Rotador",
+        "description": "Dolor en la parte anterolateral del hombro, empeora al abducir el brazo.",
+        "tests": [
+          {
+            "id": "neer",
+            "name": "Test de Neer",
+            "type": "pasiva",
+            "procedure": "El terapeuta eleva el brazo en rotación interna para provocar impingement.",
+            "positiveFinding": "Dolor subacromial indica impingement."
+          },
+          {
+            "id": "hawkins_kennedy",
+            "name": "Hawkins-Kennedy",
+            "type": "pasiva",
+            "procedure": "Flexión 90°, rotación interna forzada del hombro.",
+            "positiveFinding": "Dolor subacromial indica impingement."
+          }
+        ],
+        "treatments": [
+          {
+            "id": "fortalecimiento_manguito",
+            "name": "Ejercicios de fortalecimiento del manguito",
+            "evidence": "Nivel A (Cochrane 2022)",
+            "details": "Isométricos e isotónicos progresivos para supraespinoso, infraespinoso, etc."
+          },
+          {
+            "id": "estiramientos_pectorales",
+            "name": "Estiramientos de pectorales",
+            "evidence": "Nivel B",
+            "details": "Mejora la biomecánica subacromial y reduce el pinzamiento."
+          }
+        ]
+      }
+    ]
+  },
+  "lumbar": {
+    "pathologies": [
+      {
+        "id": "hernia_discal_lumbar",
+        "name": "Hernia Discal Lumbar",
+        "description": "Dolor lumbar con posible irradiación ciática, exacerbado al flexionar la columna.",
+        "tests": [
+          {
+            "id": "lasegue",
+            "name": "Test de Lasègue",
+            "type": "pasiva",
+            "procedure": "Elevación de la pierna extendida para tensionar el nervio ciático.",
+            "positiveFinding": "Dolor radicular entre 30° y 70° sugiere hernia discal."
+          },
+          {
+            "id": "slump_test",
+            "name": "Slump Test",
+            "type": "asistida",
+            "procedure": "Paciente sentado, flexión cervical, torácica y extensión de rodilla para tensionar dural.",
+            "positiveFinding": "Dolor ciático sugiere compromiso neural."
+          }
+        ],
+        "treatments": [
+          {
+            "id": "ejercicios_mckenzie",
+            "name": "Ejercicios de extensión (McKenzie)",
+            "evidence": "Nivel A",
+            "details": "Series de extensiones en prono para centralizar el dolor."
+          },
+          {
+            "id": "educacion_postural",
+            "name": "Educación Postural",
+            "evidence": "Nivel B",
+            "details": "Enseñar al paciente a evitar flexiones repetidas, higiene postural."
+          }
+        ]
+      }
+    ]
+  },
+  "rodilla": {
+    "pathologies": [
+      {
+        "id": "tendinopatia_rotuliana",
+        "name": "Tendinopatía Rotuliana (Rodilla del Saltador)",
+        "description": "Dolor anterior de rodilla, empeora al saltar o subir escaleras.",
+        "tests": [
+          {
+            "id": "sentadilla_45",
+            "name": "Sentadilla a 45°",
+            "type": "activa",
+            "procedure": "El paciente realiza una sentadilla parcial y se valora dolor en tendón rotuliano.",
+            "positiveFinding": "Dolor focalizado en tendón indica tendinopatía."
+          },
+          {
+            "id": "palpacion_tendon_rotuliano",
+            "name": "Palpación del Tendón Rotuliano",
+            "type": "pasiva",
+            "procedure": "Se palpa el polo inferior de la rótula para detectar dolor o engrosamiento.",
+            "positiveFinding": "Dolor localizado en el tendón."
+          }
+        ],
+        "treatments": [
+          {
+            "id": "ejercicios_excentricos_cuad",
+            "name": "Ejercicios Excéntricos de Cuádriceps",
+            "evidence": "Nivel A (Cochrane 2021)",
+            "details": "3 series de 15 repeticiones, 2-3 veces/semana."
+          },
+          {
+            "id": "taping_rotuliano",
+            "name": "Taping Rotuliano",
+            "evidence": "Nivel C",
+            "details": "Aplicación de tape para mejorar tracking y reducir dolor."
+          }
+        ]
+      }
+    ]
+  }
+}
