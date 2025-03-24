@@ -1,12 +1,13 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const { questionTriggers } = require("../questionTriggers");
 
 const router = express.Router();
 
 /**
- * Diccionario de palabras clave para cada patología,
- * con su región asociada.
+ * Diccionario de palabras clave para cada patología (region-based).
+ * Mantenemos la lógica actual para pathologies.
  */
 const keywordScores = {
   // Rodilla
@@ -31,9 +32,26 @@ const keywordScores = {
 };
 
 /**
+ * Función para detectar preguntas sugeridas
+ * según questionTriggers
+ */
+function detectQuestions(lowerText) {
+  let allQuestions = [];
+  for (const key in questionTriggers) {
+    const { keywords, questions } = questionTriggers[key];
+    // Si se detecta una de las keywords, añadimos las preguntas
+    if (keywords.some(kw => lowerText.includes(kw))) {
+      allQuestions = allQuestions.concat(questions);
+    }
+  }
+  return allQuestions;
+}
+
+/**
  * POST /api/analyze-text
  * Recibe un texto (ej. anamnesis) y asigna puntajes a cada patología.
- * Luego, busca en baseKnowledge.json la(s) patología(s) con mayor puntaje.
+ * Luego, busca en baseKnowledge.json la(s) patología(s) con mayor puntaje
+ * y añade las preguntas sugeridas (suggestedQuestions).
  */
 router.post("/analyze-text", (req, res) => {
   const { text } = req.body;
@@ -48,8 +66,6 @@ router.post("/analyze-text", (req, res) => {
   for (const pathologyId in keywordScores) {
     scores[pathologyId] = 0;
     const { keywords } = keywordScores[pathologyId];
-
-    // Sumar 1 punto por cada palabra clave que aparezca en el texto
     keywords.forEach((kw) => {
       if (lowerText.includes(kw)) {
         scores[pathologyId] += 1;
@@ -57,24 +73,26 @@ router.post("/analyze-text", (req, res) => {
     });
   }
 
-  // 2. Determinar la patología (o patologías) con mayor puntaje
+  // 2. Determinar la(s) patología(s) con mayor puntaje
   let maxScore = 0;
   for (const pathologyId in scores) {
     if (scores[pathologyId] > maxScore) {
       maxScore = scores[pathologyId];
     }
   }
-  // Filtrar las patologías que tengan ese maxScore
   const topPathologies = Object.keys(scores).filter(
     (pId) => scores[pId] === maxScore && maxScore > 0
   );
 
   // Si maxScore es 0, no detectamos nada
   if (maxScore === 0) {
+    // Aun así detectamos preguntas
+    const suggestedQuestions = detectQuestions(lowerText);
     return res.json({
       message: "No se detectó ninguna patología relevante.",
       region: null,
-      pathologies: []
+      pathologies: [],
+      suggestedQuestions
     });
   }
 
@@ -95,7 +113,6 @@ router.post("/analyze-text", (req, res) => {
         const region = keywordScores[pId].region;
         const regionData = baseKnowledge[region];
         if (regionData && regionData.pathologies) {
-          // Buscar la patología en regionData.pathologies
           const found = regionData.pathologies.find(pt => pt.id === pId);
           if (found) {
             foundPathologies.push(found);
@@ -109,10 +126,14 @@ router.post("/analyze-text", (req, res) => {
         mainRegion = keywordScores[topPathologies[0]].region;
       }
 
+      // Detectar preguntas basadas en questionTriggers
+      const suggestedQuestions = detectQuestions(lowerText);
+
       return res.json({
         message: "Patologías con mayor puntaje",
         region: mainRegion,
-        pathologies: foundPathologies
+        pathologies: foundPathologies,
+        suggestedQuestions
       });
     } catch (parseErr) {
       console.error("Error al parsear baseKnowledge.json:", parseErr);

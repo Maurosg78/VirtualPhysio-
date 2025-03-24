@@ -1,0 +1,19 @@
+/* App.css */
+.App {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+/* Columna izquierda (Ficha Clínica) */
+.ficha-clinica {
+  flex: 1;
+  border-right: 1px solid #ccc;
+  padding: 20px;
+}
+
+/* Columna derecha (Nexia Asistente) */
+.nexia-asistente {
+  flex: 1;
+  padding: 20px;
+}
