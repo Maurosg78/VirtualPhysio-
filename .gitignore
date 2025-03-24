@@ -1,4 +1,4 @@
-# Dependencias
+# Dependencies
 node_modules/
 .pnp/
 .pnp.js
@@ -6,9 +6,10 @@ node_modules/
 # Testing
 coverage/
 
-# Producción
+# Production
 build/
 dist/
+dist-ssr/
 
 # Misc
 .DS_Store
@@ -23,6 +24,26 @@ dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+logs/
+*.log
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Prisma
+prisma/*.db
+prisma/migrations/
+
+# Uploads
+backend/uploads/
+backend/uploads/exams/
+!backend/uploads/exams/.gitkeep
 
 # Editor
 .vscode/*
@@ -35,8 +56,4 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
-
-# Prisma
-prisma/*.db
-prisma/migrations/ 
+*.sw? 

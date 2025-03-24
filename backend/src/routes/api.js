@@ -3,6 +3,8 @@ const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const validate = require('../middleware/validate');
 const { patientSchema, clinicalRecordSchema, syncSchema } = require('../validators/schemas');
+const assistantController = require('../controllers/assistantController');
+const { examController, upload } = require('../controllers/examController');
 
 const prisma = new PrismaClient();
 
@@ -120,5 +122,14 @@ router.post('/sync', validate(syncSchema), async (req, res, next) => {
     next(error);
   }
 });
+
+// Rutas del asistente virtual
+router.post('/chat', assistantController.handleConversation);
+
+// Rutas de exámenes médicos
+router.post('/exams/upload', upload.single('file'), examController.uploadExam);
+router.get('/exams/patient/:patientId', examController.getPatientExams);
+router.post('/exams/:examId/results', examController.addExamResults);
+router.delete('/exams/:examId', examController.deleteExam);
 
 module.exports = router; 

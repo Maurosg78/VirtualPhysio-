@@ -18,20 +18,166 @@ model Patient {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   clinicalRecords ClinicalRecord[]
+  surgeries     Surgery[]
+  medications   Medication[]
+  allergies     Allergy[]
+}
+
+model Surgery {
+  id          String   @id @default(uuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id])
+  type        String
+  date        DateTime
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([patientId])
+}
+
+model Medication {
+  id          String   @id @default(uuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id])
+  name        String
+  dosage      String?
+  frequency   String?
+  startDate   DateTime?
+  endDate     DateTime?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([patientId])
+}
+
+model Allergy {
+  id          String   @id @default(uuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id])
+  substance   String
+  reaction    String?
+  severity    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([patientId])
 }
 
 model ClinicalRecord {
-  id            String    @id @default(uuid())
+  id            String   @id @default(uuid())
   patientId     String
-  patient       Patient   @relation(fields: [patientId], references: [id])
+  patient       Patient  @relation(fields: [patientId], references: [id])
   anamnesis     String?
   objectives    String?
   painScale     Int?
   diagnosis     String?
   treatment     String?
   notes         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  evaluations   Evaluation[]
+  treatments    Treatment[]
+  recommendations Recommendation[]
+
+  @@index([patientId])
+}
+
+model Evaluation {
+  id              String   @id @default(uuid())
+  clinicalRecordId String
+  clinicalRecord   ClinicalRecord @relation(fields: [clinicalRecordId], references: [id])
+  type            String
+  description     String
+  findings        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([clinicalRecordId])
+}
+
+model Treatment {
+  id              String   @id @default(uuid())
+  clinicalRecordId String
+  clinicalRecord   ClinicalRecord @relation(fields: [clinicalRecordId], references: [id])
+  type            String
+  description     String
+  duration        String?
+  frequency       String?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([clinicalRecordId])
+}
+
+model Recommendation {
+  id              String   @id @default(uuid())
+  clinicalRecordId String
+  clinicalRecord   ClinicalRecord @relation(fields: [clinicalRecordId], references: [id])
+  type            String
+  description     String
+  priority        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([clinicalRecordId])
+}
+
+model ChatMessage {
+  id          String   @id @default(uuid())
+  message     String
+  response    String
+  context     String?  // Para guardar el contexto de la conversación
+  section     String?  // Para identificar la sección de la ficha clínica
+  timestamp   DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([timestamp])
+}
+
+model MedicalExam {
+  id          String   @id @default(uuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id])
+  type        String   // Tipo de examen (sangre, imagen, etc.)
+  date        DateTime
+  provider    String?  // Institución o laboratorio
+  fileUrl     String?  // URL del archivo escaneado
+  results     ExamResult[]
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([patientId])
+}
+
+model ExamResult {
+  id          String   @id @default(uuid())
+  examId      String
+  exam        MedicalExam @relation(fields: [examId], references: [id])
+  parameter   String   // Nombre del parámetro
+  value       String   // Valor del resultado
+  unit        String?  // Unidad de medida
+  reference   String?  // Rango de referencia
+  status      String?  // Normal, Alto, Bajo
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([examId])
+}
+
+model ClinicalChecklist {
+  id          String   @id @default(uuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id])
+  item        String   // Elemento a verificar
+  status      String   // Completado, Pendiente, No aplica
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([patientId])
 } 

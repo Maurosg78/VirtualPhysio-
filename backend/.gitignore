@@ -43,3 +43,9 @@ prisma/migrations/
 # System Files
 .DS_Store
 Thumbs.db
+
+# Uploaded files
+uploads/
+uploads/exams/
+uploads/exams/*
+!uploads/exams/.gitkeep

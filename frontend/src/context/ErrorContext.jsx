@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Snackbar, Alert } from '@mui/material';
 
@@ -7,16 +7,21 @@ const ErrorContext = createContext();
 export function ErrorProvider({ children }) {
   const [error, setError] = useState(null);
 
-  const showError = (message, severity = 'error') => {
-    setError({ message, severity });
-  };
-
   const hideError = () => {
     setError(null);
   };
 
+  const value = useMemo(() => ({
+    error,
+    setError,
+    showError: (message, severity = 'error') => {
+      setError({ message, severity });
+    },
+    hideError
+  }), [error]);
+
   return (
-    <ErrorContext.Provider value={{ showError }}>
+    <ErrorContext.Provider value={value}>
       {children}
       <Snackbar
         open={!!error}
